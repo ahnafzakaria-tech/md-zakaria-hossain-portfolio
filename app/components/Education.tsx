@@ -1,22 +1,32 @@
+"use client";
+
 import { GraduationCap, BookOpen, BadgeCheck, Calendar, Award } from "lucide-react";
 import { education, certifications, training } from "../data/content";
+import { useReveal } from "../hooks/useReveal";
 
-function DegreeCard({ deg }: { deg: (typeof education)[number] }) {
+function DegreeCard({ deg, vis, delay }: {
+  deg: (typeof education)[number];
+  vis: boolean;
+  delay: number;
+}) {
   return (
-    <div className="flex gap-5 p-6 rounded-xl border border-border bg-cream
-                    hover:border-gold/30 hover:shadow-[0_4px_24px_rgba(11,22,40,0.06)]
-                    transition-all duration-200">
-      <div className="w-10 h-10 rounded-lg bg-navy/[0.06] flex items-center
+    <div
+      className={`rv rv-up ${vis ? "in" : ""} flex gap-5 p-6 rounded-xl border border-white/[0.08]
+                  bg-white/[0.03] hover:border-gold/25 hover:bg-white/[0.05]
+                  hover:-translate-y-[2px] transition-all duration-200`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      <div className="w-10 h-10 rounded-lg bg-white/[0.06] flex items-center
                       justify-center shrink-0 mt-0.5">
-        <GraduationCap size={18} className="text-navy/50" strokeWidth={1.75} />
+        <GraduationCap size={18} className="text-white/40" strokeWidth={1.75} />
       </div>
       <div className="min-w-0">
-        <h3 className="font-display font-bold text-navy text-[0.9375rem] tracking-tight mb-0.5">
+        <h3 className="font-display font-bold text-white/95 text-[0.9375rem] tracking-tight mb-0.5">
           {deg.degree}
         </h3>
-        <p className="text-[13px] font-medium text-navy/70 mb-2">{deg.institution}</p>
+        <p className="text-[13px] font-medium text-white/65 mb-2">{deg.institution}</p>
         <div className="flex flex-wrap items-center gap-3">
-          <span className="flex items-center gap-1.5 text-[12px] text-muted">
+          <span className="flex items-center gap-1.5 text-[12px] text-white/40">
             <Calendar size={11} strokeWidth={1.75} className="shrink-0" />
             {deg.period}
           </span>
@@ -30,26 +40,33 @@ function DegreeCard({ deg }: { deg: (typeof education)[number] }) {
   );
 }
 
-function CertCard({ cert }: { cert: (typeof certifications)[number] }) {
+function CertCard({ cert, vis, delay }: {
+  cert: (typeof certifications)[number];
+  vis: boolean;
+  delay: number;
+}) {
   return (
-    <div className="flex gap-4 p-5 rounded-xl border border-border bg-surface
-                    hover:border-gold/30 hover:shadow-[0_4px_24px_rgba(11,22,40,0.06)]
-                    transition-all duration-200">
+    <div
+      className={`rv rv-up ${vis ? "in" : ""} flex gap-4 p-5 rounded-xl border border-white/[0.08]
+                  bg-white/[0.04] hover:border-gold/25 hover:bg-white/[0.06]
+                  hover:-translate-y-[2px] transition-all duration-200`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
       <div className="w-9 h-9 rounded-lg bg-gold/10 flex items-center
                       justify-center shrink-0 mt-0.5">
         <BadgeCheck size={16} className="text-gold" strokeWidth={1.75} />
       </div>
       <div className="min-w-0 flex-1">
-        <h4 className="font-semibold text-navy text-[13.5px] tracking-tight leading-snug mb-1">
+        <h4 className="font-semibold text-white/90 text-[13.5px] tracking-tight leading-snug mb-1">
           {cert.title}
         </h4>
-        <p className="text-[12px] text-muted mb-2">{cert.issuer}</p>
+        <p className="text-[12px] text-white/40 mb-2">{cert.issuer}</p>
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-[11px] font-medium text-navy/55">{cert.type}</span>
+          <span className="text-[11px] font-medium text-white/40">{cert.type}</span>
           {cert.date && (
             <>
-              <span className="text-border-dark">·</span>
-              <span className="text-[11px] font-semibold text-navy/55">{cert.date}</span>
+              <span className="text-white/15">·</span>
+              <span className="text-[11px] font-semibold text-white/40">{cert.date}</span>
             </>
           )}
         </div>
@@ -58,26 +75,34 @@ function CertCard({ cert }: { cert: (typeof certifications)[number] }) {
   );
 }
 
-function TrainingCard({ item }: { item: (typeof training)[number] }) {
+function TrainingCard({ item, vis, delay }: {
+  item: (typeof training)[number];
+  vis: boolean;
+  delay: number;
+}) {
   return (
-    <div className="flex gap-4 p-5 rounded-xl border border-border bg-surface
-                    hover:border-border-dark transition-colors duration-200">
-      <div className="w-9 h-9 rounded-lg bg-navy/[0.06] flex items-center
+    <div
+      className={`rv rv-up ${vis ? "in" : ""} flex gap-4 p-5 rounded-xl border border-white/[0.08]
+                  bg-white/[0.03] hover:border-white/[0.14] hover:-translate-y-[1px]
+                  transition-all duration-200`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      <div className="w-9 h-9 rounded-lg bg-white/[0.06] flex items-center
                       justify-center shrink-0 mt-0.5">
-        <BookOpen size={16} className="text-navy/50" strokeWidth={1.75} />
+        <BookOpen size={16} className="text-white/40" strokeWidth={1.75} />
       </div>
       <div className="min-w-0 flex-1">
-        <h4 className="font-semibold text-navy text-[13.5px] tracking-tight leading-snug mb-1">
+        <h4 className="font-semibold text-white/90 text-[13.5px] tracking-tight leading-snug mb-1">
           {item.title}
         </h4>
-        <p className="text-[12px] text-muted mb-2">{item.issuer}</p>
+        <p className="text-[12px] text-white/40 mb-2">{item.issuer}</p>
         <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-block px-2 py-0.5 rounded bg-navy/[0.06]
-                           text-[10px] font-semibold text-navy/55 tracking-wide uppercase">
+          <span className="inline-block px-2 py-0.5 rounded bg-white/[0.06]
+                           text-[10px] font-semibold text-white/40 tracking-wide uppercase">
             {item.note}
           </span>
           {!item.date && (
-            <span className="text-[11px] text-muted/60 italic">Date not recorded</span>
+            <span className="text-[11px] text-white/25 italic">Date not recorded</span>
           )}
         </div>
       </div>
@@ -86,23 +111,29 @@ function TrainingCard({ item }: { item: (typeof training)[number] }) {
 }
 
 export default function Education() {
+  const [ref, vis] = useReveal(0.06);
+
   return (
     <section
       id="education"
+      ref={ref}
       aria-labelledby="education-heading"
-      className="section-pad bg-surface"
+      className="section-pad bg-[#070E1A]"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
 
         {/* Heading */}
         <div className="mb-14">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold mb-3">
+          <p
+            className={`rv rv-up ${vis ? "in" : ""} text-[11px] font-semibold uppercase tracking-[0.2em] text-gold mb-3`}
+            style={{ transitionDelay: "0ms" }}
+          >
             Education & Credentials
           </p>
           <h2
             id="education-heading"
-            className="font-display font-extrabold text-navy
-                       text-[2rem] sm:text-[2.4rem] tracking-tight leading-[1.15]"
+            className={`rv rv-up ${vis ? "in" : ""} font-display font-extrabold text-white/95 text-[2rem] sm:text-[2.4rem] tracking-tight leading-[1.15]`}
+            style={{ transitionDelay: "80ms" }}
           >
             Academic Background
           </h2>
@@ -112,21 +143,25 @@ export default function Education() {
 
           {/* Left: Education */}
           <div>
-            <div className="flex items-center gap-2 mb-6">
+            <div
+              className={`rv rv-up ${vis ? "in" : ""} flex items-center gap-2 mb-6`}
+              style={{ transitionDelay: "140ms" }}
+            >
               <GraduationCap size={15} className="text-gold" strokeWidth={1.75} />
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/30">
                 Degrees
               </p>
             </div>
             <div className="space-y-4">
-              {education.map((deg) => (
-                <DegreeCard key={deg.degree} deg={deg} />
+              {education.map((deg, i) => (
+                <DegreeCard key={deg.degree} deg={deg} vis={vis} delay={200 + i * 80} />
               ))}
             </div>
 
-            {/* Context note */}
-            <p className="mt-5 text-[13px] leading-[1.75] text-navy/50 italic
-                          pl-4 border-l-2 border-gold/30">
+            <p
+              className={`rv rv-up ${vis ? "in" : ""} mt-5 text-[13px] leading-[1.75] text-white/40 italic pl-4 border-l-2 border-gold/25`}
+              style={{ transitionDelay: "380ms" }}
+            >
               Legal training in drafting, regulatory analysis, and compliance
               directly supports a disciplined approach to EPC contract
               documentation and record-keeping.
@@ -136,32 +171,36 @@ export default function Education() {
           {/* Right: Certifications + Training */}
           <div className="space-y-8">
 
-            {/* Certifications */}
             <div>
-              <div className="flex items-center gap-2 mb-6">
+              <div
+                className={`rv rv-up ${vis ? "in" : ""} flex items-center gap-2 mb-6`}
+                style={{ transitionDelay: "160ms" }}
+              >
                 <Award size={15} className="text-gold" strokeWidth={1.75} />
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/30">
                   Certifications
                 </p>
               </div>
               <div className="space-y-3">
-                {certifications.map((cert) => (
-                  <CertCard key={cert.title} cert={cert} />
+                {certifications.map((cert, i) => (
+                  <CertCard key={cert.title} cert={cert} vis={vis} delay={220 + i * 70} />
                 ))}
               </div>
             </div>
 
-            {/* Professional Training */}
             <div>
-              <div className="flex items-center gap-2 mb-6">
+              <div
+                className={`rv rv-up ${vis ? "in" : ""} flex items-center gap-2 mb-6`}
+                style={{ transitionDelay: "200ms" }}
+              >
                 <BookOpen size={15} className="text-gold" strokeWidth={1.75} />
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/30">
                   Professional Training
                 </p>
               </div>
               <div className="space-y-3">
-                {training.map((item) => (
-                  <TrainingCard key={item.title} item={item} />
+                {training.map((item, i) => (
+                  <TrainingCard key={item.title} item={item} vis={vis} delay={260 + i * 60} />
                 ))}
               </div>
             </div>

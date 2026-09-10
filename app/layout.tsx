@@ -76,7 +76,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${inter.variable} ${jakarta.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-cream text-navy">
+      <body className="min-h-full flex flex-col">
         {children}
       </body>
     </html>

@@ -3,7 +3,7 @@
 
 export const person = {
   name:         "Md Zakaria Hossain",
-  nameShort:    "Zakaria Hossain",
+  nameShort:    "Md. Zakaria Hossain",
   initials:     "ZH",
   title:        "Project Document Controller",
   subtitle:     "EPC & EDMS Specialist",
@@ -11,8 +11,10 @@ export const person = {
     "Specialist in EPC project documentation, EDMS/PMIS administration, and construction document compliance — with a compliance-focused legal foundation.",
   location:     "Riyadh, Saudi Arabia",
   openTo:       "Open to relocation",
-  email:        "ahnafzakariaz@gmail.com",
+  email:        "ahnafzakariaaz@gmail.com",
   phone:        "+966 5300 26787",          // Primary (KSA) — displayed in contact section
+  whatsapp:     "+880 1517 813524",         // WhatsApp (BD number)
+  whatsappUrl:  "https://wa.me/8801517813524",
   linkedin:     "https://www.linkedin.com/in/md-zakaria-hossain-85229a23b",
   profilePhoto: "/profile.jpg",             // Place at: public/profile.jpg
   // CV path — update filename here to change it site-wide
@@ -326,17 +328,21 @@ export const softwareTools = [
 
 export const projects = [
   {
-    id:         "starah-wind",
-    name:       "Starah Independent Power Plant",
-    subtitle:   "2GW Onshore Wind Project",
-    capacity:   "2,000 MW",
-    type:       "Onshore Wind",
-    location:   "Saudi Arabia",
-    status:     "Under Construction",
-    statusKind: "active" as const,
-    contractor: "CEEC — China Energy Engineering Corporation",
-    owner:      "Project Owner (Starah IPP)",  // CV refers to "the Owner" — specific name not disclosed
-    edms:       "Thinkproject",
+    id:              "starah-wind",
+    name:            "Starah 2GW Onshore Wind Power Project",
+    subtitle:        "Saudi Arabia's Landmark Renewable Energy Project",
+    capacity:        "2,000 MW",
+    type:            "Onshore Wind",
+    location:        "Saudi Arabia",
+    status:          "Under Construction",
+    statusKind:      "active" as const,
+    contractor:      "CEEC — China Energy Engineering Corporation",
+    owner:           "ACWA Power",
+    area:            "273+ km²",
+    turbineCount:    "206",
+    turbineCapacity: "10.5 MW",
+    turbineManufacturer: "Goldwind",
+    edms:            "Thinkproject",
     myRole:     "Project Document Controller",
     period:     "Nov 2025 — Present",
     milestone:  null,

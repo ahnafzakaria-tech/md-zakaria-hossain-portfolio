@@ -1,25 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  /* Brand colors */
-  --color-navy:        #0B1628;
-  --color-navy-light:  #162440;
-  --color-navy-muted:  #1E3A5F;
-  --color-gold:        #C9A84C;
-  --color-gold-light:  #DDB96A;
-  --color-gold-pale:   #F5EDD6;
-  --color-cream:       #F8F7F4;
-  --color-surface:     #FFFFFF;
-  --color-muted:       #64748B;
-  --color-border:      #E2E8F0;
-  --color-border-dark: #CBD5E1;
+  /* ── Brand colors (used as Tailwind utilities: text-gold, bg-navy, etc.) ── */
+  --color-navy:       #0B1628;   /* card bg / dark accent sections */
+  --color-navy-light: #0F1E33;   /* elevated card bg */
+  --color-gold:       #C9A84C;   /* gold accent */
+  --color-gold-light: #DDB96A;   /* lighter gold */
+  --color-gold-pale:  #F5EDD6;   /* pale gold (gradient) */
+  --color-muted:      #6E7F95;   /* muted gray text on dark bg */
+  --color-border:     #162440;   /* dark border */
+  --color-border-dark:#1E3050;   /* slightly lighter dark border */
 
   /* Typography */
   --font-sans:    var(--font-inter);
   --font-display: var(--font-jakarta);
 
   /* Spacing */
-  --spacing-section: 6rem;
+  --spacing-section: 5.5rem;
 
   /* Radius */
   --radius-sm:   0.375rem;
@@ -29,11 +26,28 @@
   --radius-full: 9999px;
 }
 
-/* ─── Keyframes ─────────────────────────────────────────── */
+/* ─── Motion tokens ───────────────────────────────────────────── */
 
+:root {
+  --dur-fast:    0.30s;
+  --dur-base:    0.55s;
+  --dur-slow:    0.80s;
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Dark palette as CSS vars (use via arbitrary Tailwind or inline styles) */
+  --pg-dark:  #040C18;
+  --pg-mid:   #070E1A;
+  --pg-card:  #0B1628;
+  --text-w:   #EDE6D8;
+}
+
+/* ─── Keyframes ───────────────────────────────────────────────── */
+
+/* Standard fade-up (hero elements) */
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(28px); }
-  to   { opacity: 1; transform: translateY(0);    }
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fade-in {
@@ -41,32 +55,120 @@
   to   { opacity: 1; }
 }
 
-@keyframes slide-in-right {
-  from { opacity: 0; transform: translateX(32px); }
-  to   { opacity: 1; transform: translateX(0);    }
+/* Cinematic name reveal — blur dissolve + rise */
+@keyframes name-reveal {
+  from { opacity: 0; transform: translateY(48px); filter: blur(8px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0);   }
 }
 
+/* Photo clip-path unveil (left → right) */
+@keyframes photo-unveil {
+  from { clip-path: inset(0 100% 0 0 round 12px); opacity: 0.15; }
+  12%  { opacity: 1; }
+  to   { clip-path: inset(0 0%   0 0 round 12px); }
+}
+
+/* Floating badge pop */
+@keyframes badge-pop {
+  from { opacity: 0; transform: translateY(10px) scale(0.90); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+/* Ambient background glow drift */
+@keyframes glow-drift {
+  0%   { transform: translate(-50%,-50%) scale(1.00); opacity: 0.30; }
+  40%  { transform: translate(-48%,-52%) scale(1.12); opacity: 0.45; }
+  70%  { transform: translate(-52%,-48%) scale(0.94); opacity: 0.32; }
+  100% { transform: translate(-50%,-50%) scale(1.00); opacity: 0.30; }
+}
+
+/* Grid slow drift */
+@keyframes grid-drift {
+  0%   { background-position: 0    0;    }
+  100% { background-position: 52px 52px; }
+}
+
+/* Float micro-animation */
+@keyframes float {
+  0%,100% { transform: translateY(0px);  }
+  50%     { transform: translateY(-6px); }
+}
+@keyframes float-alt {
+  0%,100% { transform: translateY(0px);  }
+  50%     { transform: translateY(-5px); }
+}
+
+/* Timeline / workflow line draw */
+@keyframes line-grow {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+/* Workflow node activation pulse */
+@keyframes node-pulse {
+  0%   { box-shadow: 0 0 0 0   rgba(201,168,76,0.55); }
+  60%  { box-shadow: 0 0 0 10px rgba(201,168,76,0);   }
+  100% { box-shadow: 0 0 0 0   rgba(201,168,76,0);    }
+}
+
+/* Shimmer (gold text) */
 @keyframes shimmer {
   0%   { background-position: -200% center; }
   100% { background-position:  200% center; }
 }
 
-/* ─── Animation utilities ───────────────────────────────── */
+/* ─── Animation utilities (page-load / hero) ──────────────────── */
 
-.animate-fade-up       { animation: fade-up        0.7s cubic-bezier(0.16,1,0.3,1) both; }
-.animate-fade-in       { animation: fade-in        0.6s ease both; }
-.animate-slide-in-right{ animation: slide-in-right 0.7s cubic-bezier(0.16,1,0.3,1) both; }
+.animate-fade-up        { animation: fade-up       var(--dur-slow) var(--ease-spring) both; }
+.animate-fade-in        { animation: fade-in        0.65s ease      both; }
+.animate-name-reveal    { animation: name-reveal    0.95s var(--ease-spring) both; }
+.animate-photo-unveil   { animation: photo-unveil   1.15s var(--ease-spring) both; }
+.animate-badge-pop      { animation: badge-pop      0.70s var(--ease-spring) both; }
+.animate-float          { animation: float    3.6s ease-in-out infinite; }
+.animate-float-alt      { animation: float-alt 4.0s ease-in-out 1.6s infinite; }
 
-.delay-100 { animation-delay:  100ms; }
-.delay-200 { animation-delay:  200ms; }
-.delay-300 { animation-delay:  300ms; }
-.delay-400 { animation-delay:  400ms; }
-.delay-500 { animation-delay:  500ms; }
-.delay-600 { animation-delay:  600ms; }
-.delay-700 { animation-delay:  700ms; }
-.delay-800 { animation-delay:  800ms; }
+.delay-100  { animation-delay:  100ms; }
+.delay-150  { animation-delay:  150ms; }
+.delay-200  { animation-delay:  200ms; }
+.delay-300  { animation-delay:  300ms; }
+.delay-350  { animation-delay:  350ms; }
+.delay-400  { animation-delay:  400ms; }
+.delay-450  { animation-delay:  450ms; }
+.delay-500  { animation-delay:  500ms; }
+.delay-550  { animation-delay:  550ms; }
+.delay-600  { animation-delay:  600ms; }
+.delay-650  { animation-delay:  650ms; }
+.delay-700  { animation-delay:  700ms; }
+.delay-750  { animation-delay:  750ms; }
+.delay-800  { animation-delay:  800ms; }
+.delay-850  { animation-delay:  850ms; }
+.delay-900  { animation-delay:  900ms; }
+.delay-950  { animation-delay:  950ms; }
+.delay-1000 { animation-delay: 1000ms; }
+.delay-1050 { animation-delay: 1050ms; }
+.delay-1100 { animation-delay: 1100ms; }
+.delay-1150 { animation-delay: 1150ms; }
+.delay-1200 { animation-delay: 1200ms; }
 
-/* ─── Base ──────────────────────────────────────────────── */
+/* ─── Unified scroll-reveal system ────────────────────────────── */
+
+.rv {
+  opacity: 0;
+  transition:
+    opacity   var(--dur-base) var(--ease-spring),
+    transform var(--dur-base) var(--ease-spring);
+  will-change: opacity, transform;
+}
+.rv.in          { opacity: 1 !important; transform: none !important; }
+.rv-up          { transform: translateY(26px); }
+.rv-fade        { transform: none; }
+.rv-left        { transform: translateX(-20px); }
+.rv-right       { transform: translateX(22px); }
+.rv-scale       { transform: scale(0.95) translateY(16px); }
+.rv-fast        { transition-duration: var(--dur-fast); }
+.rv-slow        { transition-duration: var(--dur-slow); }
+
+/* ─── Base ─────────────────────────────────────────────────────── */
 
 html {
   scroll-behavior: smooth;
@@ -74,38 +176,54 @@ html {
 }
 
 ::selection {
-  background-color: rgba(201,168,76,0.18);
-  color: #0B1628;
+  background-color: rgba(201,168,76,0.25);
+  color: #EDE6D8;
 }
 
 body {
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
-  background-color: var(--color-cream);
-  color: var(--color-navy);
+  background-color: #040C18;
+  color: #EDE6D8;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.6;
+  line-height: 1.65;
 }
-
-/* ─── Typography scale ──────────────────────────────────── */
 
 h1, h2, h3, h4, h5 {
   font-family: var(--font-jakarta), var(--font-inter), system-ui, sans-serif;
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.12;
   letter-spacing: -0.02em;
-  color: var(--color-navy);
+  color: #EDE6D8;
 }
 
-/* ─── Dot-grid background (hero) ────────────────────────── */
+/* ─── Background patterns ──────────────────────────────────────── */
 
+/* Static dot grid */
 .bg-dot-grid {
   background-image:
-    radial-gradient(circle, rgba(11,22,40,0.07) 1px, transparent 1px);
+    radial-gradient(circle, rgba(237,230,216,0.07) 1px, transparent 1px);
   background-size: 26px 26px;
 }
 
-/* ─── Gold gradient text ────────────────────────────────── */
+/* Static blueprint grid */
+.bg-blueprint-grid {
+  background-image:
+    linear-gradient(rgba(237,230,216,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(237,230,216,0.04) 1px, transparent 1px);
+  background-size: 52px 52px;
+}
+
+/* Animated grid (Hero ambient motion) */
+.bg-grid-animate {
+  background-image:
+    linear-gradient(rgba(237,230,216,0.038) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(237,230,216,0.038) 1px, transparent 1px);
+  background-size: 52px 52px;
+  animation: grid-drift 24s linear infinite;
+}
+
+/* ─── Gold gradient text ───────────────────────────────────────── */
 
 .text-gold-gradient {
   background: linear-gradient(135deg, #C9A84C 0%, #E8C96A 50%, #C9A84C 100%);
@@ -115,17 +233,91 @@ h1, h2, h3, h4, h5 {
   -webkit-text-fill-color: transparent;
 }
 
-/* ─── Section padding utility ───────────────────────────── */
+/* ─── Section padding ──────────────────────────────────────────── */
 
 .section-pad {
   padding-top:    var(--spacing-section);
   padding-bottom: var(--spacing-section);
 }
 
-/* ─── Focus ring ────────────────────────────────────────── */
+/* ─── Additional keyframes ─────────────────────────────────────── */
+
+/* Horizontal line draw */
+@keyframes line-grow-h {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Scale-in reveal */
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.94) translateY(12px); }
+  60%  { transform: scale(1.02) translateY(-2px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Clip-path reveal (bottom edge lifts) */
+@keyframes clip-lift {
+  from { clip-path: inset(0 0 100% 0); opacity: 0.6; }
+  to   { clip-path: inset(0 0 0% 0);   opacity: 1;   }
+}
+
+/* Sweep shimmer — for gold text */
+@keyframes shimmer-sweep {
+  0%   { background-position: -300% center; }
+  100% { background-position:  300% center; }
+}
+
+/* ─── Additional animation utilities ──────────────────────────── */
+
+.animate-scale-in      { animation: scale-in    0.65s var(--ease-spring) both; }
+.animate-clip-lift     { animation: clip-lift   0.55s var(--ease-spring) both; }
+.animate-line-draw-h   { animation: line-grow-h 0.80s var(--ease-spring) both; transform-origin: left center; }
+.animate-shimmer       { animation: shimmer-sweep 3.5s linear infinite; background-size: 300% auto; }
+
+/* Extra delay steps */
+.delay-1250 { animation-delay: 1250ms; }
+.delay-1300 { animation-delay: 1300ms; }
+.delay-1400 { animation-delay: 1400ms; }
+.delay-1500 { animation-delay: 1500ms; }
+
+/* ─── Workflow node pulse ──────────────────────────────────────── */
+
+.node-activated {
+  animation: node-pulse 0.9s ease-out forwards;
+}
+
+/* ─── Button press micro-interaction ──────────────────────────── */
+
+.btn-press {
+  transition: transform 80ms ease, box-shadow 80ms ease;
+}
+.btn-press:active {
+  transform: scale(0.96) !important;
+}
+
+/* ─── Reduced motion ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .rv {
+    opacity: 1 !important; transform: none !important; transition: none !important;
+  }
+  .animate-fade-up, .animate-fade-in, .animate-name-reveal,
+  .animate-photo-unveil, .animate-badge-pop, .animate-float, .animate-float-alt,
+  .animate-scale-in, .animate-clip-lift, .animate-line-draw-h {
+    animation: none !important;
+    opacity:   1 !important;
+    transform: none !important;
+    filter:    none !important;
+    clip-path: none !important;
+  }
+  .bg-grid-animate { animation: none; }
+  .btn-press:active { transform: none !important; }
+}
+
+/* ─── Focus ring ───────────────────────────────────────────────── */
 
 *:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid #C9A84C;
   outline-offset: 3px;
-  border-radius: var(--radius-sm);
+  border-radius: 0.375rem;
 }
