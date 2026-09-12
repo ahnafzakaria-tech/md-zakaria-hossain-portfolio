@@ -6,16 +6,27 @@ import { useReveal } from "../hooks/useReveal";
 export default function Testimonial() {
   const [ref, vis] = useReveal(0.15);
 
+  const initials = testimonial.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("");
+
   return (
     <section
       id="testimonial"
       ref={ref}
       aria-labelledby="testimonial-heading"
-      className="section-pad bg-[#040C18]"
+      className="section-pad bg-[#040C18] relative overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+      {/* Very subtle background dot grid */}
+      <div
+        className="absolute inset-0 bg-dot-grid opacity-[0.06] pointer-events-none"
+        aria-hidden="true"
+      />
 
-        <div className="mb-12">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+
+        <div className="mb-10">
           <p
             className={`rv rv-up ${vis ? "in" : ""} text-[11px] font-semibold tracking-[0.2em] text-gold mb-3`}
             style={{ transitionDelay: "0ms" }}
@@ -31,58 +42,79 @@ export default function Testimonial() {
           </h2>
         </div>
 
+        {/* Cinematic quote container — max-width for editorial legibility */}
         <div
-          className={`rv rv-scale ${vis ? "in" : ""} relative max-w-3xl rounded-2xl border border-white/[0.08]
-                      bg-white/[0.03] shadow-[0_4px_40px_rgba(0,0,0,0.3)] overflow-hidden`}
+          className={`rv rv-up-lg rv-slow ${vis ? "in" : ""} max-w-3xl`}
           style={{ transitionDelay: "160ms" }}
         >
-          {/* Gold top accent */}
-          <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+          <div className="relative rounded-2xl overflow-hidden glass-subtle">
 
-          <div className="p-8 lg:p-12">
-
-            {/* Opening quote mark */}
+            {/* Left accent bar — gold */}
             <div
-              className={`rv rv-fade ${vis ? "in" : ""} font-display font-extrabold text-[6rem] leading-none
-                          text-gold/[0.08] select-none -mt-2 mb-3`}
-              style={{ transitionDelay: "240ms" }}
+              className="absolute top-0 left-0 w-[3px] h-full
+                         bg-gradient-to-b from-gold/60 via-gold/25 to-transparent"
               aria-hidden="true"
-            >
-              &ldquo;
-            </div>
+            />
 
-            {/* Quote */}
-            <blockquote
-              className={`rv rv-up ${vis ? "in" : ""} text-[1.0625rem] sm:text-[1.125rem] leading-[1.9]
-                          text-white/65 mb-8 -mt-8`}
-              style={{ transitionDelay: "300ms" }}
-            >
-              {testimonial.quote}
-            </blockquote>
+            <div className="pl-10 pr-8 pt-10 pb-8 lg:pl-14 lg:pr-12 lg:pt-12 lg:pb-10">
 
-            {/* Attribution */}
-            <footer
-              className={`rv rv-up ${vis ? "in" : ""} flex items-center gap-4 pt-6 border-t border-white/[0.08]`}
-              style={{ transitionDelay: "400ms" }}
-            >
+              {/* Decorative quote mark — positioned behind text */}
               <div
-                className="w-11 h-11 rounded-full bg-gold/15 border border-gold/25 flex items-center
-                           justify-center shrink-0"
+                className={`rv rv-blur ${vis ? "in" : ""} pointer-events-none select-none
+                            font-display font-black text-[9rem] leading-[0.75]
+                            text-gold/[0.07] -mt-2 mb-2`}
+                style={{ transitionDelay: "220ms" }}
                 aria-hidden="true"
               >
-                <span className="text-[12px] font-bold text-gold tracking-wide">
-                  {testimonial.name.split(" ").map((n) => n[0]).join("")}
-                </span>
+                &ldquo;
               </div>
-              <div className="min-w-0">
-                <p className="font-display font-bold text-white/90 text-[0.9375rem] tracking-tight">
-                  {testimonial.name}
-                </p>
-                <p className="text-[12.5px] text-white/40 leading-snug mt-0.5">
-                  {testimonial.role} · {testimonial.company}
-                </p>
-              </div>
-            </footer>
+
+              {/* Quote text */}
+              <blockquote
+                className={`rv rv-up ${vis ? "in" : ""} -mt-10 text-[1.05rem] sm:text-[1.125rem]
+                            leading-[1.9] text-white/65`}
+                style={{ transitionDelay: "280ms" }}
+              >
+                {testimonial.quote}
+              </blockquote>
+
+              {/* Separator */}
+              <div
+                className={`rv rv-fade ${vis ? "in" : ""} my-7 h-[1px]
+                            bg-gradient-to-r from-gold/20 via-white/[0.08] to-transparent`}
+                style={{ transitionDelay: "360ms" }}
+                aria-hidden="true"
+              />
+
+              {/* Attribution */}
+              <footer
+                className={`rv rv-up ${vis ? "in" : ""} flex items-center gap-4`}
+                style={{ transitionDelay: "420ms" }}
+              >
+                {/* Initials avatar */}
+                <div
+                  className="w-11 h-11 rounded-md bg-gold/[0.10] border border-gold/[0.22]
+                             flex items-center justify-center shrink-0"
+                  aria-hidden="true"
+                >
+                  <span className="text-[12px] font-bold text-gold/90 tracking-wide">
+                    {initials}
+                  </span>
+                </div>
+
+                <div className="min-w-0">
+                  <p className="font-display font-bold text-white/92 text-[0.9375rem] tracking-tight leading-snug">
+                    {testimonial.name}
+                  </p>
+                  <p className="text-[12.5px] text-white/38 leading-snug mt-0.5">
+                    {testimonial.role}
+                    <span className="mx-1.5 text-white/20" aria-hidden="true">·</span>
+                    {testimonial.company}
+                  </p>
+                </div>
+              </footer>
+
+            </div>
           </div>
         </div>
 

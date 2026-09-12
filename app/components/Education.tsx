@@ -11,9 +11,7 @@ function DegreeCard({ deg, vis, delay }: {
 }) {
   return (
     <div
-      className={`rv rv-up ${vis ? "in" : ""} flex gap-5 p-6 rounded-xl border border-white/[0.08]
-                  bg-white/[0.03] hover:border-gold/25 hover:bg-white/[0.05]
-                  hover:-translate-y-[2px] transition-all duration-200`}
+      className={`rv rv-up ${vis ? "in" : ""} flex gap-5 p-6 glass-base`}
       style={{ transitionDelay: `${delay}ms` }}
     >
       <div className="w-10 h-10 rounded-lg bg-white/[0.06] flex items-center
@@ -47,9 +45,7 @@ function CertCard({ cert, vis, delay }: {
 }) {
   return (
     <div
-      className={`rv rv-up ${vis ? "in" : ""} flex gap-4 p-5 rounded-xl border border-white/[0.08]
-                  bg-white/[0.04] hover:border-gold/25 hover:bg-white/[0.06]
-                  hover:-translate-y-[2px] transition-all duration-200`}
+      className={`rv rv-up ${vis ? "in" : ""} flex gap-4 p-5 glass-base`}
       style={{ transitionDelay: `${delay}ms` }}
     >
       <div className="w-9 h-9 rounded-lg bg-gold/10 flex items-center
@@ -82,9 +78,7 @@ function TrainingCard({ item, vis, delay }: {
 }) {
   return (
     <div
-      className={`rv rv-up ${vis ? "in" : ""} flex gap-4 p-5 rounded-xl border border-white/[0.08]
-                  bg-white/[0.03] hover:border-white/[0.14] hover:-translate-y-[1px]
-                  transition-all duration-200`}
+      className={`rv rv-up ${vis ? "in" : ""} flex gap-4 p-5 glass-base`}
       style={{ transitionDelay: `${delay}ms` }}
     >
       <div className="w-9 h-9 rounded-lg bg-white/[0.06] flex items-center

@@ -95,8 +95,7 @@ export default function CVSection() {
 
         {/* Card */}
         <div
-          className={`rv rv-scale ${vis ? "in" : ""} rounded-2xl border border-white/[0.08]
-                      bg-white/[0.03] shadow-[0_4px_32px_rgba(0,0,0,0.3)] overflow-hidden`}
+          className={`rv rv-scale ${vis ? "in" : ""} glass-base rounded-2xl overflow-hidden`}
           style={{ transitionDelay: "160ms" }}
         >
           <div className="flex flex-col md:flex-row gap-0">
@@ -125,9 +124,7 @@ export default function CVSection() {
                 {stats.map((s, i) => (
                   <div
                     key={s.label}
-                    className={`rv rv-up ${vis ? "in" : ""} text-center py-3 rounded-xl
-                                bg-white/[0.04] border border-white/[0.08]
-                                hover:border-gold/25 transition-colors duration-200`}
+                    className={`rv rv-up ${vis ? "in" : ""} text-center py-3 glass-subtle`}
                     style={{ transitionDelay: `${260 + i * 60}ms` }}
                   >
                     <span className="font-display font-extrabold text-white/90 text-[1.4rem] leading-none">
@@ -151,9 +148,9 @@ export default function CVSection() {
                   {competencies.map((c) => (
                     <li
                       key={c}
-                      className="px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.08]
+                      className="px-2.5 py-1 glass-subtle
                                  text-[12px] font-medium text-white/60
-                                 hover:border-gold/25 hover:text-white/80 transition-colors duration-150"
+                                 hover:border-[var(--glass-border-lit)] hover:text-white/80 transition-colors duration-150"
                     >
                       {c}
                     </li>

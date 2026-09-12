@@ -1,8 +1,10 @@
 "use client";
 
-import { Database, FileText, Scale, Zap } from "lucide-react";
+import { Database, FileText, Scale, Zap, ChevronDown } from "lucide-react";
 import { summary } from "../data/content";
 import { useReveal } from "../hooks/useReveal";
+import { useDisclosure } from "../hooks/useDisclosure";
+import { usePointerGlow } from "../hooks/usePointerGlow";
 
 const STRENGTHS = [
   {
@@ -38,6 +40,70 @@ const FEATURED_COMPETENCIES = [
   "Reporting & Data Analysis",
 ] as const;
 
+function StrengthCard({
+  strength,
+  vis,
+  delay,
+}: {
+  strength: typeof STRENGTHS[number];
+  vis: boolean;
+  delay: number;
+}) {
+  const { isOpen, triggerProps, bodyProps } = useDisclosure();
+  const { ref: glowRef, hovering, handlers: glowHandlers } = usePointerGlow<HTMLDivElement>();
+  const Icon = strength.icon;
+
+  return (
+    <div
+      ref={glowRef}
+      className={`rv rv-scale ${vis ? "in" : ""} disclosure-card glass-base glass-highlight glass-edge relative p-6 cursor-pointer overflow-hidden`}
+      style={{ transitionDelay: `${delay}ms` }}
+      data-open={isOpen}
+      data-hovering={hovering}
+      {...triggerProps}
+      {...glowHandlers}
+    >
+      <div
+        className="absolute top-0 left-0 h-[2px] w-0 bg-gradient-to-r from-gold/50 to-transparent
+                   transition-all duration-500 ease-[var(--ease-expo)]"
+        style={{ width: isOpen ? "100%" : "0%" }}
+        aria-hidden="true"
+      />
+
+      <div className="flex items-center justify-between gap-3 mb-2">
+        <div className="flex items-center gap-3">
+          <div
+            className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center shrink-0
+                       transition-all duration-300 ease-[var(--ease-spring)]"
+            style={{
+              backgroundColor: isOpen ? "rgba(201,168,76,0.2)" : "rgba(201,168,76,0.1)",
+              transform: isOpen ? "scale(1.05)" : "scale(1)",
+            }}
+          >
+            <Icon size={18} className="text-gold" strokeWidth={1.75} />
+          </div>
+          <h3 className="font-display font-bold text-white/95 text-[0.9375rem] tracking-tight
+                         transition-colors duration-200">
+            {strength.title}
+          </h3>
+        </div>
+        <div className="disclosure-chevron w-6 h-6 rounded-full bg-white/[0.06] flex items-center justify-center shrink-0">
+          <ChevronDown size={12} strokeWidth={2} className="text-white/35" />
+        </div>
+      </div>
+
+      <div className="disclosure-body" {...bodyProps}>
+        <div>
+          <p className="disclosure-item text-[0.875rem] leading-[1.75] text-white/55 pt-3"
+             style={{ transitionDelay: isOpen ? "100ms" : "0ms" }}>
+            {strength.body}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function About() {
   const [ref, vis] = useReveal(0.08);
 
@@ -49,8 +115,6 @@ export default function About() {
       className="section-pad bg-[#040C18]"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
-
-        {/* Section label + heading */}
         <div className="mb-14">
           <p
             className={`rv rv-up ${vis ? "in" : ""} text-[11px] font-semibold uppercase tracking-[0.2em] text-gold mb-3`}
@@ -68,10 +132,7 @@ export default function About() {
           </h2>
         </div>
 
-        {/* Two columns: summary + competencies */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-10 mb-16">
-
-          {/* Summary */}
           <div className="space-y-4">
             <p
               className={`rv rv-up ${vis ? "in" : ""} text-[1rem] leading-[1.85] text-white/70 max-w-[640px]`}
@@ -91,7 +152,6 @@ export default function About() {
             </p>
           </div>
 
-          {/* Core competencies */}
           <aside
             aria-label="Core competencies"
             className={`rv rv-right ${vis ? "in" : ""}`}
@@ -104,10 +164,9 @@ export default function About() {
               {FEATURED_COMPETENCIES.map((item, i) => (
                 <li
                   key={item}
-                  className={`rv rv-fade ${vis ? "in" : ""} px-3 py-1.5 rounded-md
-                              bg-white/[0.04] border border-white/[0.09]
+                  className={`rv rv-fade ${vis ? "in" : ""} px-3 py-1.5 glass-subtle
                               text-[12px] font-medium text-white/65 tracking-wide
-                              hover:border-gold/30 hover:text-white/80 transition-colors duration-150`}
+                              hover:border-[var(--glass-border-lit)] hover:text-white/80 transition-colors duration-150`}
                   style={{ transitionDelay: `${280 + i * 40}ms` }}
                 >
                   {item}
@@ -117,33 +176,16 @@ export default function About() {
           </aside>
         </div>
 
-        {/* Key strengths grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {STRENGTHS.map(({ icon: Icon, title, body }, i) => (
-            <div
-              key={title}
-              className={`rv rv-scale ${vis ? "in" : ""} group p-6 rounded-xl border border-white/[0.08]
-                          bg-white/[0.03] hover:border-gold/25
-                          hover:bg-white/[0.05]
-                          hover:-translate-y-[2px] transition-all duration-200`}
-              style={{ transitionDelay: `${320 + i * 80}ms` }}
-            >
-              <div
-                className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center mb-4
-                           group-hover:bg-gold/20 transition-colors duration-200"
-              >
-                <Icon size={18} className="text-gold" strokeWidth={1.75} />
-              </div>
-              <h3 className="font-display font-bold text-white/95 text-[0.9375rem] mb-2 tracking-tight">
-                {title}
-              </h3>
-              <p className="text-[0.875rem] leading-[1.75] text-white/55">
-                {body}
-              </p>
-            </div>
+          {STRENGTHS.map((strength, i) => (
+            <StrengthCard
+              key={strength.title}
+              strength={strength}
+              vis={vis}
+              delay={320 + i * 80}
+            />
           ))}
         </div>
-
       </div>
     </section>
   );

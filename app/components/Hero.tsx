@@ -1,11 +1,72 @@
 "use client";
 
+import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { MapPin, FileDown, ArrowRight, CheckCircle2 } from "lucide-react";
 import { person, stats } from "../data/content";
 
 const EDMS_BADGES = ["Thinkproject", "Aconex", "S-PMIS"];
+
+function HandwrittenName() {
+  const svgRef = useRef<SVGSVGElement>(null);
+  const textRef = useRef<SVGTextElement>(null);
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    document.fonts.ready.then(() => {
+      const el = textRef.current;
+      const svg = svgRef.current;
+      if (!el || !svg) return;
+      const bbox = el.getBBox();
+      svg.setAttribute(
+        "viewBox",
+        `${bbox.x - 2} ${bbox.y - 4} ${bbox.width + 4} ${bbox.height + 8}`
+      );
+      requestAnimationFrame(() => setActive(true));
+    });
+  }, []);
+
+  const font: React.CSSProperties = {
+    fontFamily: "var(--font-sacramento)",
+    fontSize: "72px",
+  };
+
+  return (
+    <div className={active ? "hero-name-animate" : "opacity-0"}>
+      <svg
+        ref={svgRef}
+        className="w-full overflow-visible"
+        viewBox="0 0 600 90"
+        aria-label="Md Zakaria Hossain"
+      >
+        <text
+          ref={textRef}
+          x="0"
+          y="0"
+          className="hero-name-stroke"
+          fill="transparent"
+          stroke="rgba(237,230,216,0.6)"
+          strokeWidth={0.6}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={font}
+        >
+          Md Zakaria Hossain
+        </text>
+        <text
+          x="0"
+          y="0"
+          className="hero-name-fill"
+          fill="rgba(237,230,216,0.95)"
+          style={font}
+        >
+          Md Zakaria Hossain
+        </text>
+      </svg>
+    </div>
+  );
+}
 
 export default function Hero() {
   return (
@@ -14,24 +75,27 @@ export default function Hero() {
       aria-label="Introduction"
       className="relative min-h-screen flex flex-col bg-[#040C18] overflow-hidden"
     >
-      {/* ── Animated grid background ─────────────────────────── */}
+      {/* ── Animated ambient background — fine particles + grid ── */}
       <div
-        className="absolute inset-0 bg-grid-animate opacity-100 pointer-events-none"
+        className="absolute inset-0 bg-hero-ambient opacity-100 pointer-events-none"
         aria-hidden="true"
       />
 
+      {/* Diagonal light sweep */}
+      <div className="hero-light-sweep" aria-hidden="true" />
+
       {/* Ambient glow — right side where photo is */}
       <div
-        className="absolute top-1/2 right-[8%] w-[500px] h-[500px] pointer-events-none"
+        className="absolute top-1/2 right-[8%] w-[540px] h-[540px] pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse at center, rgba(201,168,76,0.10) 0%, transparent 65%)",
-          animation: "glow-drift 12s ease-in-out infinite",
+          background: "radial-gradient(ellipse at center, rgba(201,168,76,0.09) 0%, transparent 65%)",
+          animation: "glow-drift 14s ease-in-out infinite",
           transform: "translate(-50%, -50%)",
         }}
         aria-hidden="true"
       />
 
-      {/* Secondary glow — left side */}
+      {/* Secondary glow — deep left blue */}
       <div
         className="absolute top-[30%] left-[5%] w-[400px] h-[400px] pointer-events-none"
         style={{
@@ -69,22 +133,9 @@ export default function Hero() {
             Available — Open to Opportunities
           </div>
 
-          {/* Name — cinematic reveal */}
-          <h1 className="mb-4 leading-[1.04]">
-            <span
-              className="animate-name-reveal delay-200 block font-display font-extrabold
-                         text-white/95 text-[3rem] sm:text-[3.8rem] lg:text-[4.2rem] xl:text-[4.8rem]
-                         tracking-tight"
-            >
-              Md. Zakaria
-            </span>
-            <span
-              className="animate-name-reveal delay-350 block font-display font-extrabold
-                         text-gold-gradient text-[3rem] sm:text-[3.8rem] lg:text-[4.2rem] xl:text-[4.8rem]
-                         tracking-tight"
-            >
-              Hossain
-            </span>
+          {/* Name — handwriting reveal */}
+          <h1 className="mb-4">
+            <HandwrittenName />
           </h1>
 
           {/* Title + descriptors */}
@@ -132,7 +183,7 @@ export default function Hero() {
             {EDMS_BADGES.map((badge) => (
               <span
                 key={badge}
-                className="px-3 py-1.5 rounded-md bg-white/[0.04] border border-white/[0.10]
+                className="px-3 py-1.5 glass-subtle
                            text-[11.5px] font-semibold text-white/55 tracking-wide"
               >
                 {badge}
@@ -182,8 +233,7 @@ export default function Hero() {
           {/* Stats row */}
           <div
             className="animate-fade-up delay-900 grid grid-cols-2 sm:grid-cols-4
-                       divide-x divide-white/[0.07] border border-white/[0.07]
-                       rounded-xl overflow-hidden bg-white/[0.03]"
+                       divide-x divide-white/[0.07] glass-subtle overflow-hidden"
           >
             {stats.map((stat) => (
               <div
@@ -259,8 +309,7 @@ export default function Hero() {
             {/* Floating role badge — bottom left */}
             <div className="animate-badge-pop delay-950 absolute -bottom-4 -left-5">
               <div
-                className="animate-float bg-[#0B1628] border border-white/[0.10] rounded-xl px-4 py-3
-                           shadow-[0_8px_32px_rgba(0,0,0,0.45)]
+                className="glass-elevated rounded-xl px-4 py-3
                            flex items-center gap-3"
               >
                 <div
@@ -280,9 +329,13 @@ export default function Hero() {
             {/* Floating location badge — top right */}
             <div className="animate-badge-pop delay-1000 absolute -top-4 -right-5">
               <div
-                className="animate-float-alt bg-[#0B1628] border border-white/[0.10] rounded-xl px-4 py-2.5
-                           shadow-[0_8px_32px_rgba(0,0,0,0.45)]
+                className="glass-elevated rounded-xl px-4 py-2.5
                            flex items-center gap-2"
+                style={{
+                  background: "rgba(11, 22, 40, 0.82)",
+                  backdropFilter: "blur(16px) saturate(1.3)",
+                  WebkitBackdropFilter: "blur(16px) saturate(1.3)",
+                }}
               >
                 <MapPin size={11} className="text-gold shrink-0" strokeWidth={2} />
                 <p className="text-[11px] font-medium text-white/85">Riyadh, KSA</p>

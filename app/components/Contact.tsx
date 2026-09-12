@@ -88,11 +88,11 @@ function Field({
 }
 
 const INPUT_BASE =
-  "w-full px-4 py-3 rounded-lg border bg-white/[0.04] text-white/90 text-[14px] " +
-  "placeholder:text-white/25 outline-none " +
+  "w-full px-4 py-3 rounded-lg border bg-[var(--glass-bg-base)] text-white/90 text-[14px] " +
+  "placeholder:text-white/25 outline-none backdrop-blur-[var(--glass-blur-sm)] " +
   "transition-colors duration-150 ";
 
-const INPUT_NORMAL = INPUT_BASE + "border-white/[0.10] focus:border-gold/50 focus:ring-1 focus:ring-gold/15";
+const INPUT_NORMAL = INPUT_BASE + "border-[var(--glass-border-base)] focus:border-gold/50 focus:ring-1 focus:ring-gold/15";
 const INPUT_ERROR  = INPUT_BASE + "border-red-500/50 focus:border-red-500/70";
 
 // ─── Contact info items ───────────────────────────────────────────────────────
@@ -121,7 +121,7 @@ function getInfoItems() {
     {
       icon:  LinkedinIcon as unknown as typeof Mail,
       label: "LinkedIn",
-      value: "Md. Zakaria Hossain",
+      value: "Md Zakaria Hossain",
       href:  person.linkedin,
       external: true,
     },
@@ -239,9 +239,7 @@ export default function Contact() {
               {INFO_ITEMS.map(({ icon: Icon, label, value, href, ...rest }) => {
                 const external = "external" in rest ? rest.external : false;
                 const inner = (
-                  <div className="flex items-center gap-4 p-4 rounded-xl border border-white/[0.08]
-                                  bg-white/[0.03] hover:border-gold/25 hover:bg-white/[0.05]
-                                  transition-all duration-150 group">
+                  <div className="flex items-center gap-4 p-4 glass-base group">
                     <div className="w-9 h-9 rounded-lg bg-gold/10 flex items-center
                                     justify-center shrink-0 group-hover:bg-gold/18
                                     transition-colors duration-150">

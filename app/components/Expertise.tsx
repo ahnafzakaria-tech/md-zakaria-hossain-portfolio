@@ -2,12 +2,12 @@
 
 import {
   FileStack, Database, ClipboardList, Scale,
-  MonitorCheck, Zap, FileText, Cpu,
+  MonitorCheck, Zap, FileText, Cpu, ChevronDown,
 } from "lucide-react";
 import { expertiseCategories, softwareTools, languages } from "../data/content";
 import { useReveal } from "../hooks/useReveal";
-
-// ─── Icon map ─────────────────────────────────────────────────────────────────
+import { useDisclosure } from "../hooks/useDisclosure";
+import { usePointerGlow } from "../hooks/usePointerGlow";
 
 const ICON_MAP = {
   FileStack:     FileStack,
@@ -15,8 +15,6 @@ const ICON_MAP = {
   ClipboardList: ClipboardList,
   Scale:         Scale,
 } as const;
-
-// ─── Level badge ─────────────────────────────────────────────────────────────
 
 const LEVEL_STYLES = {
   live:       "bg-gold/12 text-gold border-gold/25",
@@ -40,8 +38,6 @@ function LevelBadge({ level, kind }: { level: string; kind: keyof typeof LEVEL_S
   );
 }
 
-// ─── Expertise category card ──────────────────────────────────────────────────
-
 function CategoryCard({
   category, vis, delay,
 }: {
@@ -49,44 +45,73 @@ function CategoryCard({
   vis: boolean;
   delay: number;
 }) {
+  const { isOpen, triggerProps, bodyProps } = useDisclosure();
+  const { ref: glowRef, hovering, handlers: glowHandlers } = usePointerGlow<HTMLDivElement>();
   const Icon = ICON_MAP[category.icon as keyof typeof ICON_MAP] ?? FileText;
 
   return (
     <div
-      className={`rv rv-scale ${vis ? "in" : ""} group p-6 rounded-xl border border-white/[0.08]
-                  bg-white/[0.03] hover:border-gold/25 hover:bg-white/[0.05]
-                  hover:-translate-y-[2px] transition-all duration-200 flex flex-col gap-4`}
+      ref={glowRef}
+      className={`rv rv-scale ${vis ? "in" : ""} disclosure-card glass-base glass-highlight glass-edge relative p-6 cursor-pointer flex flex-col gap-4 overflow-hidden`}
       style={{ transitionDelay: `${delay}ms` }}
+      data-open={isOpen}
+      data-hovering={hovering}
+      {...triggerProps}
+      {...glowHandlers}
     >
-      <div className="flex items-center gap-3">
-        <div
-          className="w-9 h-9 rounded-lg bg-gold/10 flex items-center justify-center shrink-0
-                     group-hover:bg-gold/18 transition-colors duration-200"
-        >
-          <Icon size={17} className="text-gold" strokeWidth={1.75} />
+      <div
+        className="absolute top-0 left-0 h-[2px] bg-gradient-to-r from-gold/60 to-transparent
+                   transition-all duration-500 ease-[var(--ease-expo)]"
+        style={{ width: isOpen ? "100%" : "0%" }}
+        aria-hidden="true"
+      />
+
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div
+            className="w-9 h-9 rounded-lg bg-gold/10 flex items-center justify-center shrink-0
+                       transition-all duration-300 ease-[var(--ease-spring)]"
+            style={{
+              backgroundColor: isOpen ? "rgba(201,168,76,0.2)" : "rgba(201,168,76,0.1)",
+              transform: isOpen ? "scale(1.06)" : "scale(1)",
+            }}
+          >
+            <Icon size={17} className="text-gold" strokeWidth={1.75} />
+          </div>
+          <h3 className="font-display font-bold text-white/95 text-[0.9375rem] tracking-tight leading-snug">
+            {category.label}
+          </h3>
         </div>
-        <h3 className="font-display font-bold text-white/95 text-[0.9375rem] tracking-tight leading-snug">
-          {category.label}
-        </h3>
+        <div className="flex items-center gap-2">
+          <span className={`text-[11px] text-white/25 transition-opacity duration-200 ${isOpen ? "opacity-0" : "opacity-100"}`}>
+            {category.skills.length} skills
+          </span>
+          <div className="disclosure-chevron w-6 h-6 rounded-full bg-white/[0.06] flex items-center justify-center shrink-0">
+            <ChevronDown size={12} strokeWidth={2} className="text-white/35" />
+          </div>
+        </div>
       </div>
 
-      <ul className="flex flex-wrap gap-2" aria-label={`${category.label} skills`}>
-        {category.skills.map((skill) => (
-          <li
-            key={skill}
-            className="px-2.5 py-1.5 rounded-md bg-white/[0.04] border border-white/[0.08]
-                       text-[12px] font-medium text-white/65 leading-none
-                       transition-colors duration-150 hover:border-gold/25 hover:text-white/80"
-          >
-            {skill}
-          </li>
-        ))}
-      </ul>
+      <div className="disclosure-body" {...bodyProps}>
+        <div>
+          <ul className="flex flex-wrap gap-2 pt-1" aria-label={`${category.label} skills`}>
+            {category.skills.map((skill, i) => (
+              <li
+                key={skill}
+                className="disclosure-item px-2.5 py-1.5 glass-subtle
+                           text-[12px] font-medium text-white/65 leading-none
+                           hover:border-[var(--glass-border-lit)] hover:text-white/80 transition-colors duration-150"
+                style={{ transitionDelay: isOpen ? `${80 + i * 35}ms` : "0ms" }}
+              >
+                {skill}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }
-
-// ─── Software tool card ───────────────────────────────────────────────────────
 
 function ToolCard({ tool, vis, delay }: {
   tool: (typeof softwareTools)[number];
@@ -98,9 +123,7 @@ function ToolCard({ tool, vis, delay }: {
 
   return (
     <div
-      className={`rv rv-up ${vis ? "in" : ""} flex items-start gap-4 p-4 rounded-xl border border-white/[0.08]
-                  bg-white/[0.03] hover:border-gold/20 hover:bg-white/[0.05]
-                  hover:-translate-y-[2px] transition-all duration-200`}
+      className={`rv rv-up ${vis ? "in" : ""} flex items-start gap-4 p-4 glass-base`}
       style={{ transitionDelay: `${delay}ms` }}
     >
       <div className="w-9 h-9 rounded-lg shrink-0 flex items-center justify-center bg-white/[0.06]">
@@ -122,8 +145,6 @@ function ToolCard({ tool, vis, delay }: {
   );
 }
 
-// ─── Language item ────────────────────────────────────────────────────────────
-
 function LanguageItem({ lang }: { lang: (typeof languages)[number] }) {
   return (
     <div className="flex items-center justify-between py-3 border-b border-white/[0.07] last:border-0">
@@ -132,8 +153,6 @@ function LanguageItem({ lang }: { lang: (typeof languages)[number] }) {
     </div>
   );
 }
-
-// ─── Section ──────────────────────────────────────────────────────────────────
 
 export default function Expertise() {
   const [ref, vis] = useReveal(0.06);
@@ -146,8 +165,6 @@ export default function Expertise() {
       className="section-pad bg-[#070E1A]"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-10 space-y-14">
-
-        {/* Section heading */}
         <div>
           <p
             className={`rv rv-up ${vis ? "in" : ""} text-[11px] font-semibold uppercase tracking-[0.2em] text-gold mb-3`}
@@ -171,7 +188,6 @@ export default function Expertise() {
           </p>
         </div>
 
-        {/* Expertise category cards */}
         <div>
           <p
             className={`rv rv-up ${vis ? "in" : ""} text-[11px] font-semibold uppercase tracking-[0.18em] text-white/30 mb-5`}
@@ -191,7 +207,6 @@ export default function Expertise() {
           </div>
         </div>
 
-        {/* Software & tools */}
         <div>
           <div
             className={`rv rv-up ${vis ? "in" : ""} flex items-center gap-3 mb-5`}
@@ -209,7 +224,6 @@ export default function Expertise() {
           </div>
         </div>
 
-        {/* Languages */}
         <div
           className={`rv rv-up ${vis ? "in" : ""} max-w-xs`}
           style={{ transitionDelay: "300ms" }}
@@ -217,13 +231,12 @@ export default function Expertise() {
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/30 mb-1">
             Languages
           </p>
-          <div className="mt-2 rounded-xl border border-white/[0.07] bg-white/[0.03] px-5 divide-y divide-white/[0.07]">
+          <div className="mt-2 glass-subtle px-5 divide-y divide-white/[0.07]">
             {languages.map((lang) => (
               <LanguageItem key={lang.name} lang={lang} />
             ))}
           </div>
         </div>
-
       </div>
     </section>
   );

@@ -3,7 +3,7 @@
 
 export const person = {
   name:         "Md Zakaria Hossain",
-  nameShort:    "Md. Zakaria Hossain",
+  nameShort:    "Md Zakaria Hossain",
   initials:     "ZH",
   title:        "Project Document Controller",
   subtitle:     "EPC & EDMS Specialist",

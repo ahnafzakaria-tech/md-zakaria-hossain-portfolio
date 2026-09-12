@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans, Sacramento } from "next/font/google";
 import "./globals.css";
 import { person } from "./data/content";
 
@@ -14,6 +14,13 @@ const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
   display:  "swap",
   weight:   ["400", "500", "600", "700", "800"],
+});
+
+const sacramento = Sacramento({
+  subsets:  ["latin"],
+  variable: "--font-sacramento",
+  display:  "swap",
+  weight:   "400",
 });
 
 export const metadata: Metadata = {
@@ -74,7 +81,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jakarta.variable} h-full antialiased`}
+      className={`${inter.variable} ${jakarta.variable} ${sacramento.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         {children}
