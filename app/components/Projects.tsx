@@ -57,7 +57,7 @@ function MetaItem({ label, value }: { label: string; value: string }) {
       <span className="text-[9.5px] font-semibold uppercase tracking-[0.15em] text-white/25">
         {label}
       </span>
-      <span className="text-[13px] font-medium text-white/70 leading-snug truncate" title={value}>
+      <span className="text-[13px] font-medium text-white/70 leading-snug break-words" title={value}>
         {value}
       </span>
     </div>
@@ -269,12 +269,12 @@ function SpatialProjectCard({
         </div>
 
         {/* Summary row */}
-        <div className="pt-4 flex items-center gap-4 text-[12px] text-white/45">
-          <span className="font-semibold truncate">{project.contractor}</span>
+        <div className="pt-4 flex flex-wrap items-center gap-1.5 text-[12px] text-white/45 leading-snug">
+          <span className="font-semibold break-normal">{project.contractor}</span>
           <span className="text-white/15" aria-hidden="true">·</span>
-          <span className="truncate">{project.edms}</span>
-          <span className="text-white/15 hidden sm:inline" aria-hidden="true">·</span>
-          <span className="hidden sm:inline truncate">{project.period}</span>
+          <span className="break-normal">{project.edms}</span>
+          <span className="text-white/15 sm:hidden" aria-hidden="true">·</span>
+          <span className="sm:text-white/15 break-normal">{project.period}</span>
         </div>
 
         {/* Explore affordance */}
@@ -291,7 +291,7 @@ function SpatialProjectCard({
 
           {/* Metadata grid */}
           <div
-            className="spatial-item grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4 p-5 rounded-xl bg-white/[0.03] border border-white/[0.07] mb-5"
+            className="spatial-item grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4 p-5 rounded-xl bg-white/[0.03] border border-white/[0.07] mb-5"
             style={{ transitionDelay: isOpen ? "260ms" : "0ms" }}
           >
             <MetaItem label="EPC Contractor" value={project.contractor} />
