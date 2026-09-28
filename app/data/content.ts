@@ -15,7 +15,7 @@ export const person = {
   phone:        "+966 5300 26787",          // Primary (KSA) — displayed in contact section
   whatsapp:     "+880 1517 813524",         // WhatsApp (BD number)
   whatsappUrl:  "https://wa.me/8801517813524",
-  linkedin:     "https://www.linkedin.com/in/md-zakaria-hossain-85229a23b",
+  linkedin:     "https://www.linkedin.com/in/workwithzakariapro",
   profilePhoto: "/profile.jpg",             // Place at: public/profile.jpg
   // CV path — update filename here to change it site-wide
   cvPath:       "/assets/Md-Zakaria-Hossain-CV.pdf",
